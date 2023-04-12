@@ -1,0 +1,243 @@
+﻿@using System.Text;
+@using SP23_G21_SHSMS.Models.Campuses;
+@using SP23_G21_SHSMS.Models.SHSMS;
+@{
+    ViewData["Title"] = "Cập nhật hồ sơ khám";
+
+    MedicalRecord record = Model.MedicalRecord;
+    Student student = Model.Student;
+    IEnumerable<Symptom> symptoms = record.Symptoms;
+    Symptom symptom = symptoms.First();
+    IEnumerable<Disease> diseases = Model.Diseases;
+    IEnumerable<Treatment> treatments = Model.Treatments;
+    Treatment treatment = treatments.First();
+    IEnumerable<User> users = Model.Users;
+    User user = users.First();
+    IEnumerable<Export> exports = record.Exports;
+
+}
+
+
+<h4 class="mt-5 text-center">Cập nhật hồ sơ khám</h4>
+<hr />
+<style>
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
+<form asp-action="Edit" method="post">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="row">
+                    <div class="col-sm-9">
+                        <input id="txtSearch" name="txtSearch" class="form-control" placeholder="Tìm sinh viên theo Roll Number" />
+                    </div>
+                    <div class="col-sm-3 mt-3 mt-sm-0">
+                        <button type="button" class="btn btn-primary w-100" id="btnSearch">Tìm kiếm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container mb-0">
+        <div id="lblMessage">
+        </div>
+        <div class="table-responsive">
+            <div class="row mx-3" id="studentData">
+            </div>
+        </div>
+    </div>
+    <div id="createDiv" class="container pt-3" style="display: none;">
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="row">
+                    <div class="col-sm-9 col-md-9">
+                    </div>
+                    <div class="col-sm-3 col-md-3 mt-3 mt-sm-0">
+                        <input type="hidden" value="@record.MedicalRecordsId" id="medicalRecordId" name="medicalRecordId" />
+                        <input type="submit" value="Cập nhật thông tin hồ sơ khám" class="btn btn-primary w-100" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr />
+</form>
+
+<div class="container px-4 py-5">
+    <div class="card card-cover rounded-4 shadow-lg">
+        <p class="pb-2 border-bottom mx-4 my-3 text-secondary text-center h3">Chi tiết hồ sơ</p>
+        <div class="container">
+            <div class="table-responsive mx-3">
+                <table class="table table-bordered">
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(modelItem => student.StudentName)</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @{
+                                if (!record.RollNumber.ToLower().Equals("Temp".ToLower()))
+                                {
+                                    @Html.DisplayFor(modelItem => student.StudentName)
+                                    @Html.Raw(" - ")
+                                    @Html.DisplayFor(model => record.RollNumber)
+                                }
+                                if (record.RollNumber.ToLower().Equals("Temp".ToLower()))
+                                {
+                                    <a href="#" class="text-decoration-none text-danger">Chưa có thông tin bệnh nhân</a>
+                                }
+                            }
+                        </td>
+                        <td style="width: 15%;" class="table-light">@*@Html.DisplayNameFor(model => record.UserId)*@ Người khám</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @foreach (var u in users)
+                            {
+                                if (u.UserId == record.UserId)
+                                {
+                                    @Html.DisplayFor(modelItem => u.UserName)
+                                    break;
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@*@Html.DisplayNameFor(model => record.Sys) / @Html.DisplayNameFor(model => record.Dia)*@ Huyết áp</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.Sys) / @Html.DisplayFor(model => record.Dia) </td>
+
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.BodyTemperature)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.BodyTemperature)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.HeartRate)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.HeartRate)</td>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.Spo2)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.Spo2)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => symptom.SymptomName)</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @{
+                                StringBuilder listSymptom = new StringBuilder("");
+                            }
+                            @foreach (var sym in symptoms)
+                            {
+                                if (sym == symptoms.Last())
+                                {
+                                    listSymptom.Append(sym.SymptomName?.ToString());
+                                }
+                                else
+                                {
+                                    listSymptom.Append(sym.SymptomName?.ToString() + ", ");
+                                }
+                            }
+                            @listSymptom
+                        </td>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.SymptomNote)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.SymptomNote)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.DiseaseId)</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @foreach (var d in diseases)
+                            {
+                                if (d.DiseasesId == record.DiseaseId)
+                                {
+                                    @Html.DisplayFor(modelItem => d.DiseasesName)
+                                    break;
+                                }
+                            }
+                        </td>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.DiseaseNote)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.DiseaseNote)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => treatment.TreatmentName)</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @foreach (var trmnt in treatments)
+                            {
+                                if (trmnt.TreatmentId == record.TreatmentId)
+                                {
+                                    @Html.DisplayFor(model => trmnt.TreatmentName)
+                                    break;
+                                }
+                            }
+                        </td>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.TreatmentNote)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.TreatmentNote)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.ExaminationTime)</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @{
+                                var time = record.ExaminationTime?.ToString("dd/MM/yyyy hh:mm:ss");
+                            }
+                            @time
+                        </td>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.Note)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.Note)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            // Hide the textarea initially
+            $("#btnSearch").click(function () {
+                if ($("#txtSearch").val() == null || $("#txtSearch").val() == undefined || $("#txtSearch").val() === "" || $("#txtSearch").val() == "") {
+                    $("#lblMessage").html("");
+                    //$("#lblMessage").append("Vui lòng nhập Roll Number!");
+                    $("#lblMessage").append("<div class=\"px-3 pt-3 text-danger fw-bold\">Vui lòng nhập Roll Number!</div>");
+                } else {
+                    $('#lblMessage').hide();
+                    $('#createDiv').hide();
+                    $.ajax({
+                        type: "GET",
+                        url: "/MedicalRecords/GetStudent",
+                        data: { "rollNumber": $("#txtSearch").val() },
+                        success: function (response) {
+                            if (response == null) {
+                                $("#lblMessage").html("");
+                                //$("#lblMessage").append("Không tìm thấy thông tin sinh viên với Roll Number: " + $("#txtSearch").val() + "!");
+                                $("#lblMessage").append($("<div class=\"px-3 pt-3 text-danger fw-bold\">Không tìm thấy thông tin sinh viên với Roll Number: '" + $("#txtSearch").val() + "'</div>"));
+                                $('#lblMessage').show();
+                                $("#studentData").empty();
+                                $('#createDiv').hide();
+                            } else {
+                                $("#studentData").empty();
+                                const dateString = response.Dob;
+                                const dateParts = dateString.split('T')[0].split('-');
+                                const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+                                $("#studentData").append($("<table class=\"tblStudent table table-bordered table-warning mt-3 mb-0\"><thead><tr><th>MSSV</th><th>Tên</th><th>Ngày sinh</th><th>Bảo hiểm y tế</th><th>Số điện thoại</th><th>Địa chỉ</th><th>Số điện thoại phụ huynh</th><th>CMND/CCCD</th></tr></thead><tbody><tr class=\"table-light\"><td>" + response.RollNumber + "<input type=\"hidden\" name=\"txtStudent\" value=" + response.RollNumber + " /></td><td>" + response.StudentName + " </td><td>" + formattedDate + "</td><td>" + response.HealthInsurance + " </td><td>" + response.Phone + "</td><td>" + response.StudentAddress + " </td><td>" + response.ParentPhone + "</td><td>" + response.Identification + " </td></tr></tbody></table>"));
+                                $('#createDiv').show();
+                            }
+                        },
+                        error: function (response) {
+                            $("#studentData").empty();
+                            $('#createDiv').hide();
+                        }
+                    });
+                }
+            });
+            $('form').on('keydown', function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+}

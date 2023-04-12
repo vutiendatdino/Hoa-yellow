@@ -1,0 +1,65 @@
+﻿@using SP23_G21_SHSMS.Models.Campuses;
+@model dynamic
+
+@{
+	ViewData["Title"] = "Clinic Head";
+}
+<div class="container px-4 py-5">
+	<div class="card card-cover rounded-4 shadow-lg">
+		<h2 class="pb-2 border-bottom mx-4 my-3 text-secondary">Clinic Head Features</h2>
+		<div class="d-flex flex-column bd-highlight mb-3">
+			<div class="d-grid gap-2 px-4">
+				<a asp-controller="Users" asp-action="Index" class="btn btn-outline-warning text-start text-dark">Staffs</a>
+				<a asp-controller="MedicalRecords" asp-action="Index" class="btn btn-outline-warning text-start text-dark">Medical Records</a>
+				@*<a asp-controller="Prescriptions" asp-action="Index" class="btn btn-outline-warning text-start text-dark">Prescriptions</a>*@
+				<a asp-controller="Symptoms" asp-action="Index" class="btn btn-outline-warning text-start text-dark">Symptoms</a>
+				<a asp-controller="Storage" asp-action="Index" class="btn btn-outline-warning text-start text-dark">Medicine Storage</a>
+				<a asp-controller="Report" asp-action="Index" class="btn btn-outline-warning text-start text-dark">Reports</a>
+			</div>
+		</div>
+	</div>
+	@*<p><b>Symptoms</b></p>
+	<table class="table table-hover table-striped">
+
+		<thead>
+			<tr>
+				<th scope="col">SymptomID</th>
+				<th scope="col">SymptomName</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (Symptom symptom in Model.Symptom)
+			{
+				<tr>
+					<td>@Html.DisplayFor(modelItem => symptom.SymptomId)</td>
+					<td>@Html.DisplayFor(modelItem => symptom.SymptomName)</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+	<p><b>Supplier</b></p>
+	<table class="table table-hover table-striped">
+
+		<thead>
+			<tr>
+				<th scope="col">SupplierId</th>
+				<th scope="col">SupplierName</th>
+				<th scope="col">Address</th>
+				<th scope="col">PhoneNumber</th>
+				<th scope="col">Status</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (Supplier supplier in Model.Supplier)
+			{
+				<tr>
+					<td>@Html.DisplayFor(modelItem => supplier.SupplierId)</td>
+					<td>@Html.DisplayFor(modelItem => supplier.SupplierName)</td>
+					<td>@Html.DisplayFor(modelItem => supplier.Address)</td>
+					<td>@Html.DisplayFor(modelItem => supplier.PhoneNumber)</td>
+					<td>@Html.DisplayFor(modelItem => supplier.Status)</td>
+				</tr>
+			}
+		</tbody>
+	</table>*@
+</div>

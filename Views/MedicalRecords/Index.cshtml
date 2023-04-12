@@ -1,0 +1,39 @@
+﻿@using SP23_G21_SHSMS.Models.Campuses;
+@using SP23_G21_SHSMS.Models.SHSMS;
+@*@model IEnumerable<SP23_G21_SHSMS.Models.Campuses.MedicalRecord>*@
+@model dynamic
+
+@{
+    ViewData["Title"] = "Hồ sơ khám chữa bệnh";
+}
+
+<div class="container px-4 py-5">
+    <div class="card card-cover rounded-4 shadow-lg">
+        <h2 class="pb-2 border-bottom mx-4 my-3 text-secondary">Hồ sơ khám chữa bệnh</h2>
+        <div class="d-flex flex-column bd-highlight mb-3">
+            <div class="d-grid gap-2 px-4">
+                <div class="row">
+                    <div class="col-6">
+                        <a asp-action="Create" class="btn btn-outline-warning text-center text-dark w-100">Tạo hồ sơ khám</a>
+                    </div>
+                    <div class="col-6">
+                        <a asp-action="CreateTemp" class="btn btn-outline-warning text-center text-dark w-100">Tạo hồ sơ khám tạm</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <a asp-action="GetAllRecords" class="btn btn-outline-warning text-center text-dark w-100">Danh sách hồ sơ khám</a>
+                    </div>
+                    <div class="col-6">
+                        <a asp-action="GetAllAnonymousRecords" class="btn btn-outline-warning text-center text-dark w-100">Danh sách hồ sơ khám tạm</a>
+                    </div>
+                </div>
+                @*<a asp-action="Create" class="btn btn-outline-warning text-start text-dark">Tạo hồ sơ khám</a>
+                <a asp-action="CreateTemp" class="btn btn-outline-warning text-start text-dark">Tạo hồ sơ khám tạm</a>
+                <a asp-action="GetAllRecords" class="btn btn-outline-warning text-start text-dark">Danh sách hồ sơ khám</a>
+                <a asp-action="GetAllAnonymousRecords" class="btn btn-outline-warning text-start text-dark">Danh sách hồ sơ khám tạm</a>*@
+                <a asp-controller="Head" asp-action="Index" class="btn btn-outline-warning text-dark text-center">Quay lại</a>
+            </div>
+        </div>
+    </div>
+</div>

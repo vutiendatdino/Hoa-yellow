@@ -1,0 +1,51 @@
+﻿@model SP23_G21_SHSMS.Models.SHSMS.Category
+@{
+    <form asp-controller="Exports" asp-action="TestPost" method="post">
+        <div class="alert-danger" asp-validation-summary="ModelOnly"></div>
+        <label asp-for="CategoryName" class="control-label"></label>
+        <select asp-for="CategoryId" class="form-select" asp-items="@(new SelectList(ViewBag.ListOfCategory,"CategoryId","CategoryName"))"></select>
+        <hr />
+        <label class="control-label">Medicine Name</label>
+        <select class="form-select" id="slMedicine" asp-items="@(new SelectList(string.Empty,"MedicineId","MedicineName"))"></select>
+        <hr />
+    </form>
+}
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            var items = "<option value='0'>Select</option>";
+            $('#slMedicine').html(items);
+            $('#CategoryId').change(function () {
+                var url = "/Exports/GetMedicines";
+                var ddlsource = '#CategoryId';
+                console.log('Url: ' + url);
+                console.log('ddlsource: ' + ddlsource);
+
+                $.ajax({
+                    type: "GET",
+                    url: "/Exports/GetMedicines",
+                    data: { categoryId: $("#CategoryId").val() },
+                    success: function (response, status, xhr) {
+                        console.log("Response: " + response);
+                        console.log("#CategoryId: " + $("#CategoryId").val());
+                        if (response == null) {
+                            console.log("Bi null roiiiii!!!");
+                        } else {
+                            $("#slMedicine").empty();
+                            $.each(response, function (index, value) {
+                                console.log("MedicineId:" + value.MedicineId + ", MedicineName:" + value.MedicineName);
+                                $("#slMedicine").append("<option value='" + value.MedicineId + "'>" + value.MedicineName + "</option>")
+                            });
+                        }
+                    },
+                    error: function (response) {
+                        console.log("ERROR");
+                    }
+                });
+            });
+        });
+    </script>
+}

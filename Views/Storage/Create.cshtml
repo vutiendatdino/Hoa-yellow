@@ -1,0 +1,125 @@
+﻿@model SP23_G21_SHSMS.Models.Campuses.Consignment
+
+@{
+    ViewData["Title"] = "Create";
+}
+<h1>Nhập thuốc</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="MedicineId" class="control-label"></label>
+                
+                <select id="MedicineId" asp-for="MedicineId" class="form-control" asp-items="ViewBag.MedicineId"></select>
+                @*<input asp-for="MedicineId" class="form-control" id="Name"/>*@
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label asp-for="Quantity" class="control-label"></label>
+                                <input asp-for="Quantity" class="form-control" />
+                                <span asp-validation-for="Quantity" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label class="control-label">Đơn vị tính </label>
+                            <input id="UnitName" readonly class="form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConsignmentNumber" class="control-label"></label>
+                <input asp-for="ConsignmentNumber" class="form-control" />
+                <span asp-validation-for="ConsignmentNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ManufactureDate" class="control-label"></label>
+                <input asp-for="ManufactureDate" class="form-control" />
+                <span asp-validation-for="ManufactureDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ExpiredDate" class="control-label"></label>
+                <input asp-for="ExpiredDate" class="form-control" />
+                <span asp-validation-for="ExpiredDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Nhập kho" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Quay lại</a>
+</div>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }    
+    <script>
+        $(function () {
+            $("#MedicineId").change(function () {
+                var medicineId = $(this).val();
+                if (medicineId) {
+                    $.ajax({
+                        url: "/Storage/GetUnit",
+                        type: "GET",
+                        data: { medicineId: medicineId },
+                        success: function (result) {
+                            $("#UnitName").val(result);
+                        }
+                    });
+                } else {
+                    $("#UnitName").val("");
+                }
+            });
+        });
+    </script>
+    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#Name").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Storage/AutoData/",
+                        type: "POST",
+                        dataType: "json",
+                        data: { Prefix: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return { label: item.MedicineName, value: item.MedicineName };
+                            }))
+                        }
+                    })
+                },
+                messages: {
+                    noResults: "", results: ""
+                }
+            });
+        })
+    </script>
+
+    }
+

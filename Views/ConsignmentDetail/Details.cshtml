@@ -1,0 +1,85 @@
+﻿@using SP23_G21_SHSMS.Models.CustomModels;
+@using SP23_G21_SHSMS.Models.SHSMS;
+@using SP23_G21_SHSMS.Models.Campuses;
+@model dynamic
+<div>
+    <h4>Chi tiết lô thuốc</h4>
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Mã thuốc
+                </th>
+                <th>
+                    Tên thuốc
+                </th>
+                <th>
+                    Ngày nhập
+                </th>
+                <th>
+                    Mã lô
+                </th>
+                <th>
+                    Ngày sản xuất
+                </th>
+                <th>
+                    Hạn sử dụng
+                </th>
+                <th>
+                    Số lượng nhập
+                </th>
+                <th>
+                    Tồn kho
+                </th>
+                <th>
+                    Đơn vị tính
+                </th>
+                <th>
+                    Giá nhập
+                </th>
+            </tr>
+        </thead>
+        @*<tbody>
+            @{
+                CustomViewStorageModel item = Model.Detail;
+                    <tr>
+                        <td>
+                            @item.Medicine.MedicineId
+                        </td>
+                        <td>
+                            @item.Medicine.MedicineName
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Storage.Import.ImportDate)
+                        </td>
+                        <td>
+                            @item.Consignment.ConsignmentNumber
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Consignment.ManufactureDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Consignment.ExpiredDate)
+                        </td>
+                        <td>
+                            @item.Consignment.Quantity
+                        </td>
+                        <td>
+                            @item.Storage.Quantity
+                        </td>
+                        <td>
+                            @item.Medicine.Unit.UnitName
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Consignment.Price)
+                        </td>
+                    </tr>
+            }
+        </tbody*@>
+    </table>
+</div>
+<div>
+    <a asp-action="ViewStorage" asp-controller="Storage">Quay lại kho thuốc</a><br />
+    @*<a asp-action="AnnihilateConsignment" asp-controller="Storage" asp-route-consId="@item.Consignment.ConsignmentId">Tiêu hủy lô thuốc này</a>*@
+</div>

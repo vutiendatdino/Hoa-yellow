@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EPPlus" Version="6.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="7.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Campuses\" />
+    <Folder Include="Models\SHSMS\" />
+    <Folder Include="Repositories\SHSMS_Repository\CategoryRepo\" />
+    <Folder Include="Repositories\SHSMS_Repository\ContactRepo\" />
+    <Folder Include="Repositories\SHSMS_Repository\FeRepo\" />
+    <Folder Include="Repositories\SHSMS_Repository\ManufactureRepo\" />
+    <Folder Include="Repositories\SHSMS_Repository\MedicineRepo\" />
+    <Folder Include="Repositories\SHSMS_Repository\UnitRepo\" />
+    <Folder Include="Repositories\SHSMS_Repository\RoleRepo\" />
+    <Folder Include="Repositories\SHSMS_Repository\PermissionRepo\" />
+    <Folder Include="Services\SHSMS_Services\CategoryServices\" />
+    <Folder Include="Services\SHSMS_Services\ContactServices\" />
+    <Folder Include="Services\SHSMS_Services\ManufactureServices\" />
+    <Folder Include="Services\SHSMS_Services\FeServices\" />
+    <Folder Include="Services\SHSMS_Services\MedicineServices\" />
+    <Folder Include="Services\SHSMS_Services\UnitServices\" />
+    <Folder Include="Services\SHSMS_Services\RoleServices\" />
+    <Folder Include="Services\SHSMS_Services\PermissionServices\" />
+  </ItemGroup>
+
+</Project>

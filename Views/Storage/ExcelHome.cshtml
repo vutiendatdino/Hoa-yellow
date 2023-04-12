@@ -1,0 +1,10 @@
+﻿@using (Html.BeginForm("ImportFromExcel", "Storage", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="form-group">
+        <label for="file">Excel file(xlsx):</label>
+        <input type="file" name="file" id="file" class="form-control-file" accept=".xlsx">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Nhập kho</button>
+}
+<a class="btn btn-primary btn sm" asp-controller="Storage" asp-action="ExportTemplate">Tải mẫu tại đây</a>

@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Admin";
+}
+<div class="container px-4 py-5">
+    <div class="card card-cover rounded-4 shadow-lg">
+        <h2 class="pb-2 border-bottom mx-4 my-3 text-secondary">Admin Features</h2>
+        <div class="d-flex flex-column bd-highlight mb-3">
+            <div class="d-grid gap-2 px-4">
+                <a asp-controller="Campus" asp-action="Index" class="btn btn-outline-warning text-start text-dark">Campuses</a>
+                <a asp-controller="Users" asp-action="Index" class="btn btn-outline-warning text-start text-dark">Users</a>
+                <a asp-controller="Categories" asp-action="Index" class="btn btn-outline-warning text-start text-dark">Categories</a>
+                <a asp-controller="Medicines" asp-action="Index" class="btn btn-outline-warning text-start text-dark">Medicines</a>
+            </div>
+        </div>
+    </div>
+</div>

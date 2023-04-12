@@ -1,0 +1,66 @@
+﻿@model IEnumerable<SP23_G21_SHSMS.Models.Campuses.Export>
+
+@{
+    ViewData["Title"] = "Exports";
+}
+
+<h1>Export</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExportDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Note)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MedicalRecords)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExportDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Note)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MedicalRecords.MedicalRecordsId)
+                </td>
+                <td>
+                    @*<a asp-action="Edit" asp-route-id="@item.ExportId">Edit</a> |*@
+                    <a asp-action="Details" asp-route-id="@item.ExportId">Details</a>
+                    @*| <a asp-action="Delete" asp-route-id="@item.ExportId">Delete</a>*@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

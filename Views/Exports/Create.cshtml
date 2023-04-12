@@ -1,0 +1,404 @@
+﻿@using SP23_G21_SHSMS.Models.Campuses;
+@using SP23_G21_SHSMS.Models.SHSMS;
+@using System.Text;
+@model dynamic
+@{
+    ViewData["Title"] = "Tạo đơn";
+
+    IEnumerable<Student> students = Model.Students;
+    Student student = students.First();
+    IEnumerable<Symptom> symptoms = Model.Symptoms;
+    Symptom symptom = symptoms.First();
+    IEnumerable<Disease> diseases = Model.Diseases;
+    Disease disease = diseases.First();
+    IEnumerable<Treatment> treatments = Model.Treatments;
+    Treatment treatment = treatments.First();
+    IEnumerable<Medicine> medicines = Model.Medicines;
+    Medicine medicine = medicines.First();
+    IEnumerable<User> users = Model.Users;
+    MedicalRecord record = Model.MedicalRecord;
+    Export export = Model.Export;
+    ExportDetail exportDetail = Model.ExportDetail;
+    List<Category> categories = Model.ListOfCategory;
+    string categoryOptions = "";
+    foreach (var cate in categories)
+    {
+        categoryOptions += "<option value=\\\"" + cate.CategoryId + "\\\">" + cate.CategoryName + "</option>";
+    }
+    string medicineOptions = "";
+    // Loop through the medicines and add them to the options string
+    foreach (var med in medicines)
+    {
+        medicineOptions += "<option value=\\\"" + med.MedicineId + "\\\">" + med.MedicineName + "</option>";
+    }
+}
+
+<div class="container px-4 pt-5 pb-3">
+    <div class="card card-cover rounded-4 shadow-lg">
+        <p class="pb-2 border-bottom mx-4 my-3 text-secondary text-center h3">Chi tiết hồ sơ</p>
+        <div class="container">
+            <div class="table-responsive mx-3">
+                <table class="table table-bordered">
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(modelItem => student.StudentName)</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @Html.DisplayFor(modelItem => student.StudentName)
+                            @Html.Raw(" - ")
+                            @Html.DisplayFor(model => record.RollNumber)
+                        </td>
+                        <td style="width: 15%;" class="table-light">@*@Html.DisplayNameFor(model => record.UserId)*@ Người khám</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @foreach (var u in users)
+                            {
+                                if (u.UserId == record.UserId)
+                                {
+                                    @Html.DisplayFor(modelItem => u.UserName)
+                                    break;
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@*@Html.DisplayNameFor(model => record.Sys) / @Html.DisplayNameFor(model => record.Dia)*@ Huyết áp</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.Sys) / @Html.DisplayFor(model => record.Dia) </td>
+
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.BodyTemperature)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.BodyTemperature)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.HeartRate)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.HeartRate)</td>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.Spo2)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.Spo2)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => symptom.SymptomName)</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @{
+                                StringBuilder listSymptom = new StringBuilder("");
+                            }
+                            @foreach (var sym in symptoms)
+                            {
+                                if (sym == symptoms.Last())
+                                {
+                                    listSymptom.Append(sym.SymptomName?.ToString());
+                                }
+                                else
+                                {
+                                    listSymptom.Append(sym.SymptomName?.ToString() + ", ");
+                                }
+                            }
+                            @listSymptom
+                        </td>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.SymptomNote)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.SymptomNote)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.DiseaseId)</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @foreach (var d in diseases)
+                            {
+                                if (d.DiseasesId == record.DiseaseId)
+                                {
+                                    @Html.DisplayFor(modelItem => d.DiseasesName)
+                                    break;
+                                }
+                            }
+                        </td>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.DiseaseNote)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.DiseaseNote)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => treatment.TreatmentName)</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @foreach (var trmnt in treatments)
+                            {
+                                if (trmnt.TreatmentId == record.TreatmentId)
+                                {
+                                    @Html.DisplayFor(model => trmnt.TreatmentName)
+                                    break;
+                                }
+                            }
+                        </td>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.TreatmentNote)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.TreatmentNote)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.ExaminationTime)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.ExaminationTime)</td>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.Note)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.Note)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@*<div class="container px-4 py-0">
+    <div class="card card-cover rounded-4 shadow-lg">
+        <p class="pb-2 border-bottom mx-4 my-3 text-secondary text-center h3">Đơn thuốc</p>
+        <div class="container">
+            <div class="table-responsive mx-3">
+                <form asp-action="Create">
+                    <table class="table table-bordered table-secondary my-0">
+                        <input type="hidden" name="txtUserId" value="@record.UserId"></input>
+                        <input type="hidden" name="txtRecordId" value="@record.MedicalRecordsId"></input>
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(m => medicine.MedicineName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(m => exportDetail.Quantity)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(m => medicine.Unit.UnitName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(m => medicine.Direction)
+                                </th>
+                                <th>
+                                    Remove
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="product-list">
+                            <tr>
+                                <td>
+                                    <select class="form-select" name="slMedicine">
+                                        @foreach (var i in medicines)
+                                        {
+                                            <option value="@i.MedicineId">@i.MedicineName</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" name="txtQuantity" />
+                                </td>
+                                <td>
+                                    <label></label>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="txtDirection" />
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger" name="btnRemove" onclick="removeRow(this)">Remove</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-bordered table-secondary">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    @Html.DisplayNameFor(model => @export.Amount)
+                                </td>
+                                <td>
+                                    <input asp-for="@export.Amount" name="txtAmount" class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayNameFor(model => @export.Note)
+                                </td>
+                                <td>
+                                    <input asp-for="@export.Note" name="txtNote" class="form-control" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="form-group float-end mb-3">
+                        <button type="button" class="btn btn-success" id="add-product">Add Medicine</button>
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+*@
+<div class="container px-4 py-0">
+    <div class="card card-cover rounded-4 shadow-lg">
+        <p class="pb-2 border-bottom mx-4 my-3 text-secondary text-center h3">Đơn thuốc</p>
+        <div class="container">
+            <div class="table-responsive mx-3">
+                <form asp-action="Create">
+                    <table class="table table-bordered table-secondary my-0">
+                        <input type="hidden" name="txtUserId" value="@record.UserId"></input>
+                        <input type="hidden" name="txtRecordId" value="@record.MedicalRecordsId"></input>
+                        <thead>
+                            <tr>
+                                <th style="width:30%">
+                                    Loại thuốc
+                                </th>
+                                <th style="width:20%">
+                                    @Html.DisplayNameFor(m => medicine.MedicineName)
+                                </th>
+                                <th style="width:10%">
+                                    @Html.DisplayNameFor(m => exportDetail.Quantity)
+                                </th>
+                                <th style="width:10%">
+                                    @Html.DisplayNameFor(m => medicine.Unit.UnitName)
+                                </th>
+                                <th style="width:20%">
+                                    @Html.DisplayNameFor(m => medicine.Direction)
+                                </th>
+                                <th style="width:10%">
+                                    Remove
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="product-list">
+                            <tr>
+                                <td>
+                                    @*<select name="CategoryId" class="form-select" asp-items="@(new SelectList(ViewBag.ListOfCategory,"CategoryId","CategoryName"))"></select>*@
+                                    <select class="form-select category" name="slCategory">
+                                        <option value="0">Chọn danh mục thuốc</option>
+                                        @foreach (var i in categories)
+                                        {
+                                            <option value="@i.CategoryId">@i.CategoryName</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td>
+                                    @*<select class="form-select" name="slMedicine" asp-items="@(new SelectList(string.Empty,"MedicineId","MedicineName"))"></select>*@
+                                    <select class="form-select medicine" name="slMedicine">
+                                        <option value="0">Chọn thuốc</option>
+                                        @foreach (var i in medicines)
+                                        {
+                                            <option value="@i.MedicineId">@i.MedicineName</option>
+                                        }
+                                    </select>
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" name="txtQuantity" />
+                                </td>
+                                <td class="text-center">
+                                    <label name="lblUnit" class="mt-2"></label>
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="txtDirection" value=""/>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger" name="btnRemove" onclick="removeRow(this)">Remove</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-bordered table-secondary">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    @Html.DisplayNameFor(model => @export.Amount)
+                                </td>
+                                <td>
+                                    <input asp-for="@export.Amount" name="txtAmount" disabled class="form-control" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Html.DisplayNameFor(model => @export.Note)
+                                </td>
+                                <td>
+                                    <input asp-for="@export.Note" name="txtNote" class="form-control" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="form-group float-end mb-3">
+                        <button type="button" class="btn btn-success" id="add-product">Add Medicine</button>
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="float-end">
+    <a asp-controller="MedicalRecords" asp-action="Details" asp-route-id="@record.MedicalRecordsId">Back to List</a>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            var productList = $("#product-list");
+            var productCount = productList.children().length;
+            //$("#add-product").click(function () {
+            //    var newRow = $("<tr><td></td><td><select class=\"form-select\" name=\"slMedicine\">@Html.Raw(medicineOptions)");
+            //    newRow.append("</select></td>")
+            //    newRow.append("<td><input type=\"number\" name=\"txtQuantity\" class=\"form-control\"/></td><td><label></label></td><td><input type=\"text\" class=\"form-control\" name=\"txtDirection\" /></td><td><button type=\"button\" class=\"btn btn-danger\" name=\"btnRemove\" onclick=\"removeRow(this)\">Remove</button></td>")
+            //    console.log(newRow);
+            //    productList.append(newRow);
+            //    productCount++;
+            //});
+
+            $("#add-product").click(function () {
+                var newRow = $("<tr><td><select class=\"form-select category\" name=\"slCategory\"><option value=\"0\">Chọn danh mục thuốc</option>@Html.Raw(categoryOptions)</select></td><td><select class=\"form-select medicine\" name=\"slMedicine\"><option>Chọn thuốc</option>");
+                newRow.append("</select></td>")
+                newRow.append("<td><input type=\"number\" name=\"txtQuantity\" class=\"form-control\"/></td><td class=\"text-center\"><label name=\"lblUnit\" class=\"mt-2\"></label></td><td><input type=\"text\" class=\"form-control\" name=\"txtDirection\" value=\"\"/></td><td><button type=\"button\" class=\"btn btn-danger\" name=\"btnRemove\" onclick=\"removeRow(this)\">Remove</button></td>")
+
+                productList.append(newRow);
+                productCount++;
+            });
+
+            $("#product-list").on("click", "button[name='btnRemove']", function () {
+                $(this).closest('tr').remove();
+            });
+
+
+            $(document).on('change', 'select[name="slCategory"]', function () {
+                var category = $(this).val();
+                var row = $(this).closest('tr');
+                var medicineDropdown = row.find('select[name="slMedicine"]');
+                var directionInput = row.find('input[name="txtDirection"]');
+                // AJAX call to retrieve medicine options for the selected category
+                $.ajax({
+                    url: '/Exports/GetMedicines',
+                    type: "GET",
+                    data: { categoryId: category },
+                    success: function (data) {
+                        // Clear existing options and add new ones
+                        medicineDropdown.empty();
+                        $.each(data, function (index, option) {
+                            medicineDropdown.append('<option value="' + option.MedicineId + '">' + option.MedicineName + '</option>');
+                        });
+                        medicineDropdown.trigger('change');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log('Error:', errorThrown);
+                    }
+                });
+            });
+
+            
+            $(document).on('change', 'select[name="slMedicine"]', function () {
+                var selectedValue = $(this).val();
+                var tr = $(this).closest('tr');
+                $.ajax({
+                    url: '/Exports/GetMedicine',
+                    type: "GET",
+                    data: { medicineId: selectedValue },
+                    success: function (data) {
+                        console.log("DATA: "+data.Direction);
+                        // Clear existing options and add new ones
+                        //var lblUnit = $(this).closest('tr').find('label[name=lblUnit]');
+                        //lblUnit.text(data.Unit);
+                        var row = $(this).closest('tr');
+                        tr.find('input[name="txtDirection"]').val(data.Direction);
+                        tr.find('label[name="lblUnit"]').text(data.Unit.UnitName);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log('Error:', errorThrown);
+                    }
+                });
+                console.log(selectedValue);
+            });
+
+        });
+    </script>
+}

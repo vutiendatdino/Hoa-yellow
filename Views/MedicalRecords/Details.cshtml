@@ -1,0 +1,223 @@
+﻿@using SP23_G21_SHSMS.Models.Campuses;
+@using System.Text;
+@using SP23_G21_SHSMS.Models.SHSMS;
+@model dynamic
+
+@{
+    ViewData["Title"] = "Medical Record Details";
+    MedicalRecord record = Model.MedicalRecord;
+    Student student = Model.Student;
+    IEnumerable<Symptom> symptoms = record.Symptoms;
+    Symptom symptom = symptoms.First();
+    IEnumerable<Disease> diseases = Model.Diseases;
+    IEnumerable<Treatment> treatments = Model.Treatments;
+    Treatment treatment = treatments.First();
+    IEnumerable<User> users = Model.Users;
+    User user = users.First();
+    IEnumerable<Export> exports = record.Exports;
+}
+
+<div class="container px-4 py-5">
+    <div class="card card-cover rounded-4 shadow-lg">
+        <p class="pb-2 border-bottom mx-4 my-3 text-secondary text-center h3">Chi tiết hồ sơ</p>
+        <div class="container">
+            <div class="table-responsive mx-3">
+                <table class="table table-bordered">
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(modelItem => student.StudentName)</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @{
+                                if (!record.RollNumber.ToLower().Equals("Temp".ToLower()))
+                                {
+                                    @Html.DisplayFor(modelItem => student.StudentName)
+                                    @Html.Raw(" - ")
+                                    @Html.DisplayFor(model => record.RollNumber)
+                                }
+                                if (record.RollNumber.ToLower().Equals("Temp".ToLower()))
+                                {
+                                    <a asp-action="Edit" asp-route-id="@record.MedicalRecordsId" class="text-decoration-none text-danger">Cập nhật thông tin</a>
+                                }
+                            }
+                        </td>
+                        <td style="width: 15%;" class="table-light">@*@Html.DisplayNameFor(model => record.UserId)*@ Người khám</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @foreach (var u in users)
+                            {
+                                if (u.UserId == record.UserId)
+                                {
+                                    @Html.DisplayFor(modelItem => u.UserName)
+                                    break;
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@*@Html.DisplayNameFor(model => record.Sys) / @Html.DisplayNameFor(model => record.Dia)*@ Huyết áp</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.Sys) / @Html.DisplayFor(model => record.Dia) </td>
+
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.BodyTemperature)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.BodyTemperature)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.HeartRate)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.HeartRate)</td>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.Spo2)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.Spo2)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => symptom.SymptomName)</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @{
+                                StringBuilder listSymptom = new StringBuilder("");
+                            }
+                            @foreach (var sym in symptoms)
+                            {
+                                if (sym == symptoms.Last())
+                                {
+                                    listSymptom.Append(sym.SymptomName?.ToString());
+                                }
+                                else
+                                {
+                                    listSymptom.Append(sym.SymptomName?.ToString() + ", ");
+                                }
+                            }
+                            @listSymptom
+                        </td>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.SymptomNote)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.SymptomNote)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.DiseaseId)</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @foreach (var d in diseases)
+                            {
+                                if (d.DiseasesId == record.DiseaseId)
+                                {
+                                    @Html.DisplayFor(modelItem => d.DiseasesName)
+                                    break;
+                                }
+                            }
+                        </td>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.DiseaseNote)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.DiseaseNote)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => treatment.TreatmentName)</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @foreach (var trmnt in treatments)
+                            {
+                                if (trmnt.TreatmentId == record.TreatmentId)
+                                {
+                                    @Html.DisplayFor(model => trmnt.TreatmentName)
+                                    break;
+                                }
+                            }
+                        </td>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.TreatmentNote)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.TreatmentNote)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.ExaminationTime)</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @{
+                                var time = record.ExaminationTime?.ToString("dd/MM/yyyy hh:mm:ss");
+                            }
+                            @time
+                        </td>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(model => record.Note)</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(model => record.Note)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        @*Danh sách đơn thuốc*@
+        @if (exports.Any())
+        {
+            Export export = exports.First();
+
+            <p class="pb-2 border-bottom mx-4 my-3 text-secondary text-center h3">Danh sách đơn thuốc | <a class="text-decoration-none" asp-controller="Exports" asp-action="Create" asp-route-id="@record.MedicalRecordsId">Thêm đơn thuốc</a></p>
+            <div class="container">
+                <div class="table-responsive mx-3">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center">
+                                    #
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => export.UserId)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => export.ExportDate)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => export.Note)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => export.Amount)
+                                </th>
+                                @*<th>
+                            @Html.DisplayNameFor(model => export.Status)
+                            </th>*@
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int count2 = 0;
+                            }
+                            @foreach (var item in exports)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        @(++count2)
+                                    </td>
+                                    <td>
+                                        @foreach (var u in users)
+                                        {
+                                            if (u.UserId == item.UserId)
+                                            {
+                                                @Html.DisplayFor(modelItem => u.Email)
+                                                break;
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.ExportDate)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Note)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Amount)
+                                    </td>
+                                    @*<td>
+                            @{
+                            string s2 = item.Status == true ? "Active" : "Deactive";
+                            }
+                            @s2
+                            </td>*@
+                                    <td>
+                                        @*<a asp-action="Edit" asp-route-id="@item.ExportId">Edit</a> |*@
+                                        <a asp-controller="Exports" asp-action="Details" asp-route-id="@item.ExportId">Details</a>
+                                        @*| <a asp-action="Delete" asp-route-id="@item.ExportId">Delete</a>*@
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            <p class="pb-2 mx-4 my-3 text-secondary text-center h3">Hiện chưa có đơn thuốc nào | <a class="text-decoration-none" asp-controller="Exports" asp-action="Create" asp-route-id="@record.MedicalRecordsId">Thêm đơn thuốc</a></p>
+        }
+        @*End Danh sách đơn thuốc*@
+    </div>
+</div>
+
+<div class="container">
+    @*<a asp-action="Edit" asp-route-id="@record.MedicalRecordsId">Edit</a> |*@
+    <a asp-action="Index" class="btn btn-secondary float-end">Back to List</a>
+</div>

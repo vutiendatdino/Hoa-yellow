@@ -1,0 +1,20 @@
+﻿@{
+	ViewData["Title"] = "Storage";
+}
+<div class="container px-4 py-5">
+	<div class="card card-cover rounded-4 shadow-lg">
+		<h2 class="pb-2 border-bottom mx-4 my-3 text-secondary">Quản lý kho thuốc</h2>
+		<div class="d-flex flex-column bd-highlight mb-3">
+			<div class="d-grid gap-2 px-4">
+				<a asp-controller="Storage" asp-action="ViewStorage" class="btn btn-outline-warning text-start text-dark">Thuốc trong kho</a>
+				<a asp-controller="Storage" asp-action="WanningExpDate" class="btn btn-outline-warning text-start text-dark">Thuốc sắp hết hạn</a>
+				<a asp-controller="Storage" asp-action="WaitingForDestructionList" class="btn btn-outline-warning text-start text-dark">Thuốc hết hạn chờ tiêu hủy</a>
+				<a asp-controller="Storage" asp-action="AnnihilatedList" class="btn btn-outline-warning text-start text-dark">Thuốc đã tiêu hủy</a>				
+				<a asp-controller="Storage" asp-action="Create" class="btn btn-outline-warning text-start text-dark">Nhập thuốc</a>
+				<a asp-controller="Storage" asp-action="ExcelHome" class="btn btn-outline-warning text-start text-dark">Nhập thuốc từ file Excel</a>
+				
+				<a asp-controller="Head" asp-action="Index" class="btn btn-outline-warning text-dark text-start">Quay lại</a>
+			</div>
+		</div>
+	</div>
+</div>

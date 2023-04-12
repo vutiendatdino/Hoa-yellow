@@ -1,0 +1,74 @@
+﻿@model IEnumerable<SP23_G21_SHSMS.Models.SHSMS.Contact>
+
+@{
+    ViewData["Title"] = "Contacts";
+}
+
+<h1 class="px-2">Thông tin liên lạc</h1>
+
+<form asp-controller="Contacts" asp-action="SearchContacts" method="post">
+    <div class="row">
+        <div class="col-3">
+            <div class="float-end">
+                <label class="col-form-label">Tên cơ sở</label>
+            </div>
+        </div>
+        <div class="col-6">
+            @*<select class="form-select" name="number">
+                <option value="1">Chọn tên cơ sở</option>
+                @foreach (var item in Model)
+                {
+                    <option value="@item.CampusId">@item.Campus.CampusName</option>
+                }
+            </select>*@
+            <select class="form-select" name="campus">
+                <option value="0">Chọn tên cơ sở</option>
+                @foreach (var item in Model.Select(c => new { c.CampusId, c.Campus.CampusName }).Distinct())
+                {
+                    <option value="@item.CampusId">@item.CampusName</option>
+                }
+            </select>
+            @*<select id="CampusId" asp-for="CampusId" class ="form-control" asp-items="ViewBag.CampusId"></select>*@
+        </div>
+        <div class="col-3">
+            <button class="btn btn-primary" type="submit">Tìm kiếm</button>
+        </div>
+    </div>
+</form>
+
+<p class="px-2">
+    <a asp-action="Create">Thêm liên lạc mới</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Campus.CampusName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Campus.CampusName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ContactId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.ContactId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ContactId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

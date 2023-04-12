@@ -1,0 +1,29 @@
+﻿@model IEnumerable<SP23_G21_SHSMS.Models.SHSMS.Campus>
+@using SP23_G21_SHSMS.Ultilities;
+@{
+    ViewData["Title"] = "Login";
+}
+
+@if (TempData[Constants.Error] != null)
+{
+    <h1 class="text-danger">@TempData[Constants.Error]</h1>
+}
+<form asp-controller="Login" asp-action="Login" method="post">
+    <div class="row">
+        <div class="col-1 mx-3">
+            <label class="col-form-label">Campus</label>
+        </div>
+        <div class="col-9 p-0">
+            <select class="form-select" name="number">
+                <option value="default">Select campus</option>
+                @foreach (var item in Model)
+                {
+                    <option value="@item.CampusId">@item.CampusName</option>
+                }
+            </select>
+        </div>
+        <div class="col-1">
+            <button class="btn btn-primary" type="submit">Login</button>
+        </div>
+    </div>
+</form>

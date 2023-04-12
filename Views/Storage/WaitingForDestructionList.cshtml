@@ -1,0 +1,103 @@
+﻿@using SP23_G21_SHSMS.Models.CustomModels;
+@using SP23_G21_SHSMS.Models.SHSMS;
+@using SP23_G21_SHSMS.Models.Campuses;
+@model dynamic
+
+<link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="css/site.css" />
+<link rel="stylesheet" href="css/SHSMS.styles.css" />
+<script src="https://kit.fontawesome.com/abfc1c7393.js" crossorigin="anonymous"></script>
+
+<div class="container">
+    <div class="row">        
+        <div class="col-12">
+            <div class="card card-cover rounded-4 shadow-lg p-3">
+                @{
+                    if (((IDictionary<string, object>)Model).ContainsKey("WaitingList"))
+                    {
+                        
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Mã thuốc                                        
+                                    </th>
+                                    <th>
+                                        Tên Thuốc
+                                    </th>
+                                    <th>
+                                        Mã Lô
+                                    </th>
+                                    <th>
+                                        Hạn sử dụng                                        
+                                    </th>
+                                    <th>
+                                        Tồn Kho
+                                    </th>
+                                    <th>
+                                        Đơn vị tính
+                                    </th>
+                                    <th>
+                                        
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (CustomViewStorageModel item in Model.WaitingList)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Medicine.MedicineId)
+                                        </td>
+                                        <td>
+                                   //         <a asp-action="Details" asp-controller="ConsignmentDetail"
+                                   //asp-route-impId="@item.Storage.ImportId"
+                                   //asp-route-med="@item.Medicine.MedicineId"
+                                   //asp-route-consId="@item.Consignment.ConsignmentId">
+                                   //             @Html.DisplayFor(modelItem => item.Medicine.MedicineName)
+                                   //         </a>
+                                        </td>
+                                        <td>
+                                   //         <a asp-action="Details" asp-controller="ConsignmentDetail"
+                                   //asp-route-impId="@item.Storage.ImportId"
+                                   //asp-route-med="@item.Medicine.MedicineId"
+                                   //asp-route-consId="@item.Consignment.ConsignmentId">
+                                   //             @Html.DisplayFor(modelItem => item.Consignment.ConsignmentNumber)
+                                   //         </a>
+                                        </td>
+                                        <td>
+                                   //         <a asp-action="Details" asp-controller="ConsignmentDetail"
+                                   //asp-route-impId="@item.Storage.ImportId"
+                                   //asp-route-med="@item.Medicine.MedicineId"
+                                   //asp-route-consId="@item.Consignment.ConsignmentId">
+                                   //             @Html.DisplayFor(modelItem => item.Consignment.ExpiredDate)
+                                   //         </a>
+                                        </td>
+                                        <td>
+                                   //         <a asp-action="Details" asp-controller="ConsignmentDetail"
+                                   //asp-route-impId="@item.Storage.ImportId"
+                                   //asp-route-med="@item.Medicine.MedicineId"
+                                   //asp-route-consId="@item.Consignment.ConsignmentId">
+                                   //             @Html.DisplayFor(modelItem => item.Storage.Quantity)
+                                   //         </a>
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Medicine.Unit.UnitName)
+                                        </td>
+                                        <td>
+                                            <a asp-action="AnnihilateConsignment" asp-route-consId="@item.Consignment.ConsignmentId">Tiêu hủy</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p>Không có dữ liệu phù hợp</p>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

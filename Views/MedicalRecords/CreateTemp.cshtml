@@ -1,0 +1,269 @@
+﻿@using SP23_G21_SHSMS.Models.Campuses;
+@using SP23_G21_SHSMS.Models.SHSMS;
+@{
+    ViewData["Title"] = "Tạo hồ sơ khám tạm";
+    //IEnumerable<Student> students = Model.Students;
+    //Student student = students.First();
+    IEnumerable<Symptom> symptoms = Model.Symptoms;
+    Symptom symptom = symptoms.First();
+    IEnumerable<Disease> diseases = Model.Diseases;
+    Disease disease = diseases.First();
+    IEnumerable<Treatment> treatments = Model.Treatments;
+    Treatment treatment = treatments.First();
+    MedicalRecord record = Model.Record;
+}
+
+<h4 class="mt-5 text-center">Tạo hồ sơ khám tạm</h4>
+<hr />
+<style>
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /* Firefox */
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+</style>
+
+<form asp-action="CreateTemp" method="post">
+    <div id="createDiv" class="container">
+        <div class="row">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="row mt-3 mt-sm-0 form-group pt-3 d-flex justify-content-center align-items-center pe-0 ps-3">
+                <div class="col-md-2">
+                    <label name="lblSymptom" class="control-label">Chỉ số sinh tồn</label>
+                </div>
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-4 d-flex justify-content-center align-items-center pe-1">
+                            @*@Html.DisplayNameFor(model => @record.Sys)*@
+                            Huyết áp
+                        </div>
+                        <div class="col-md-8 ps-0 d-flex justify-content-center align-items-center ">
+                            <input name="txtSys" type="number" class="form-control text-end" /> <span class="px-1">/</span><input name="txtDia" type="number" class="form-control text-end" />                            
+                        </div>
+                    </div>
+                </div>
+                @*<div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-4 d-flex justify-content-center align-items-center pe-1">
+                            @Html.DisplayNameFor(model => @record.Dia)
+                        </div>
+                        <div class="col-md-8 ps-0 d-flex justify-content-center align-items-center ">
+                            <input name="txtDia" type="number" class="form-control text-end" />
+                        </div>
+                    </div>
+                </div>*@
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-4 d-flex justify-content-center align-items-center pe-1">
+                            @Html.DisplayNameFor(model => @record.BodyTemperature)
+                        </div>
+                        <div class="col-md-8 ps-0 d-flex justify-content-center align-items-center ">
+                            <input name="txtBodyTemperature" type="number" class="form-control text-end" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-4 d-flex justify-content-center align-items-center pe-1">
+                            @Html.DisplayNameFor(model => @record.HeartRate)
+                        </div>
+                        <div class="col-md-8 ps-0 d-flex justify-content-center align-items-center ">
+                            <input name="txtHeartRate" type="number" class="form-control text-end" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-4 d-flex justify-content-center align-items-center pe-1">
+                            @Html.DisplayNameFor(model => @record.Spo2)
+                        </div>
+                        <div class="col-md-8 ps-0 d-flex justify-content-center align-items-center ">
+                            <input name="txtSpo2" type="number" class="form-control text-end" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-4 d-flex justify-content-center align-items-center pe-1">
+                        </div>
+                        <div class="col-md-8 ps-0 d-flex justify-content-center align-items-center ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3 mt-sm-0 form-group pt-3 d-flex justify-content-center align-items-center pe-0 ps-3">
+                <div class="col-md-2">
+                    <label name="lblSymptom" class="control-label">Triệu chứng</label>
+                </div>
+                <div class="col-md-10">
+                    @foreach (var symptomTmp in symptoms)
+                    {
+                        <span class="mx-1">
+                            <label style="cursor:pointer">
+                                <input type="checkbox" name="cbSymptom" value="@symptomTmp.SymptomId" style="cursor:pointer" />
+                                @symptomTmp.SymptomName
+                            </label>
+                        </span>
+                    }
+                </div>
+            </div>
+            <div class="row mt-3 mt-sm-0 form-group pt-3 justify-content-center align-items-center pe-0 ps-3" id="SymptomNote">
+                <div class="col-md-2">
+                    <label name="lblSymptomNote" class="control-label">@Html.DisplayNameFor(model => @record.SymptomNote)</label>
+                </div>
+                <div class="col-md-10">
+                    <textarea class="form-control" name="txtSymptomNote" placeholder="Chi tiết triệu chứng của bệnh nhân" rows="1"></textarea>
+                </div>
+            </div>
+            <div class="row mt-3 mt-sm-0 form-group pt-3 justify-content-center align-items-center pe-0 ps-3">
+                <div class="col-md-2">
+                    <label class="control-label">Chẩn đoán bệnh</label>
+                </div>
+                <div class="col-md-10">
+                    <select asp-for="@disease.DiseasesId" class="form-select" asp-items="ViewBag.DiseasesList" name="slDisease"></select>
+                </div>
+            </div>
+            <div class="row mt-3 mt-sm-0 form-group pt-3 justify-content-center align-items-center pe-0 ps-3" id="DiseaseNote">
+                <div class="col-md-2">
+                    <label name="lblDiseaseNote" class="control-label">@Html.DisplayNameFor(model => @record.DiseaseNote)</label>
+                </div>
+                <div class="col-md-10">
+                    <textarea class="form-control" name="txtDiseaseNote" placeholder="Chi tiết chẩn đoán bệnh của bệnh nhân" rows="1"></textarea>
+                </div>
+            </div>
+            <div class="row mt-3 mt-sm-0 form-group pt-3 justify-content-center align-items-center pe-0 ps-3">
+                <div class="col-md-2">
+                    <label class="control-label">Phương pháp điều trị</label>
+                </div>
+                <div class="col-md-10">
+                    <select asp-for="@treatment.TreatmentId" class="form-select" asp-items="ViewBag.TreatmentList" name="slTreatment"></select>
+                </div>
+            </div>
+            @*<div class="row mt-3 mt-sm-0 form-group pt-3 justify-content-center align-items-center pe-0 ps-3" id="groupTreatment">
+                <div class="col-md-2">
+                    <label class="control-label"></label>
+                </div>
+                <div class="col-md-10">
+                    <span class="mx-1">
+                        <label style="cursor:pointer">
+                            <input type="checkbox" name="cbTreatment" value="1" />
+                            Thực hiện sơ cứu
+                        </label>
+                    </span>
+                </div>
+            </div>*@
+            <div class="row mt-3 mt-sm-0 form-group pt-3 justify-content-center align-items-center pe-0 ps-3" id="TreatmentNote">
+                <div class="col-md-2">
+                    <label name="lblTreatmentNote" class="control-label">@Html.DisplayNameFor(model => @record.TreatmentNote)</label>
+                </div>
+                <div class="col-md-10">
+                    <textarea class="form-control" name="txtTreatmentNote" placeholder="Chi tiết việc chuyển tuyến của bệnh nhân" rows="1"></textarea>
+                </div>
+            </div>
+            <div class="row mt-3 mt-sm-0 form-group pt-3 justify-content-center align-items-center pe-0 ps-3">
+                <div class="col-md-2">
+                    <label name="lblNote" class="control-label">@Html.DisplayNameFor(model => @record.Note)</label>
+                </div>
+                <div class="col-md-10">
+                    <textarea class="form-control" name="txtNote" placeholder="Ghi chú" rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row pt-3">
+            <div class="col-sm-12 col-md-12">
+                <div class="row">
+                    <div class="col-sm-9 col-md-9">
+                    </div>
+                    <div class="col-sm-3 col-md-3 mt-3 mt-sm-0">
+                        <input type="submit" value="Tạo hồ sơ khám" class="btn btn-primary w-100" />
+                        @*<button type="submit" class="btn btn-primary w-100" id="btnSearch">Tạo hồ sơ khám</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div>
+    <a asp-action="Index" class="float-end btn btn-secondary mt-3 me-2">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        $(document).ready(function () {
+            // Hide the textarea initially
+            $('#SymptomNote').hide();
+            //$('#groupTreatment').hide();
+
+            // Add a change event listener to the checkbox elements
+            $('input[type="checkbox"][name="cbSymptom"]').change(function () {
+                // Get the checkbox value
+                var value = $(this).val();
+
+                // Check if the checkbox is checked or unchecked
+                if ($(this).is(':checked')) {
+                    // If the value is 1, show the textarea
+                    if (value === '1') {
+                        $('#SymptomNote').show();
+                    }
+                } else {
+                    // If the value is 1, hide the textarea
+                    if (value === '1') {
+                        $('#SymptomNote').hide();
+                    }
+                }
+            });
+
+            $('select[name="slDisease"]').change(function () {
+                // Get the selected value
+                var value = $(this).val();
+
+                // Check if the value is 1
+                if (value === '1') {
+                    // If it is, show the SymptomNote div
+                    $('#DiseaseNote').show();
+                } else {
+                    // If it's not, hide the SymptomNote div
+                    $('#DiseaseNote').hide();
+                }
+            });
+
+            $('select[name="slTreatment"]').change(function () {
+                // Get the selected value
+                var value = $(this).val();
+
+                // Check if the value is 2
+                if (value === '2') {
+                    // If it is, show the SymptomNote div
+                    $('#TreatmentNote').show();
+                    //$('#groupTreatment').hide();
+                } else if (value === '5') {
+                    $('#TreatmentNote').hide();
+                    //$('#groupTreatment').show();
+                } else {
+                    // If it's not, hide the SymptomNote div
+                    $('#TreatmentNote').hide();
+                    //$('#groupTreatment').hide();
+                }
+            });
+
+            $('form').on('keydown', function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+}

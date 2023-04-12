@@ -1,0 +1,77 @@
+﻿@using SP23_G21_SHSMS.Models.CustomModels;
+@using SP23_G21_SHSMS.Models.SHSMS;
+@using SP23_G21_SHSMS.Models.Campuses;
+@model dynamic
+
+<link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="css/site.css" />
+<link rel="stylesheet" href="css/SHSMS.styles.css" />
+<script src="https://kit.fontawesome.com/abfc1c7393.js" crossorigin="anonymous"></script>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-cover rounded-4 shadow-lg p-3">
+                @{
+                    if (((IDictionary<string, object>)Model).ContainsKey("List"))
+                    {
+
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Mã thuốc
+                                    </th>
+                                    <th>
+                                        Tên thuốc
+                                    </th>
+                                    <th>
+                                        Mã lô
+                                    </th>
+                                    <th>
+                                        Ngày tiêu hủy
+                                    </th>
+                                    <th>
+                                        Số lượng tiêu hủy
+                                    </th>
+                                    <th>
+                                        Đơn vị tính
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (CustomAnihilatedModel item in Model.List)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Medicine.MedicineId)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Medicine.MedicineName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Consignment.ConsignmentNumber)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Export.ExportDate)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ExportDetail.Quantity)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Medicine.Unit.UnitName)
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p>Không có dữ liệu phù hợp</p>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>

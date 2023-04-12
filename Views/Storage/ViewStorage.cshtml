@@ -1,0 +1,147 @@
+﻿@using SP23_G21_SHSMS.Models.CustomModels;
+@using SP23_G21_SHSMS.Models.SHSMS;
+@using SP23_G21_SHSMS.Models.Campuses;
+@model dynamic
+@{
+
+}
+<link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="css/site.css" />
+<link rel="stylesheet" href="css/SHSMS.styles.css" />
+<script src="https://kit.fontawesome.com/abfc1c7393.js" crossorigin="anonymous"></script>
+
+<div class="container">
+    <div class="row py-3">
+        <div class="col-4">
+        </div>
+        <div class="col-4">
+            <div class="float-end">
+                <form asp-controller="Storage" asp-action="WanningExpDate" id="myForm">
+                    <button class="btn btn-outline-secondary" type="submit">Thuốc sắp hết hạn</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-4">
+            <form id="view-storage-form" asp-action="ViewStorage" method="get">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Nhập tên thuốc" name="SearchString" value="@ViewData["currentFilter"]">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit" id="view-storage"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        @*<div class="col-4">
+        <div class="card card-cover rounded-4 shadow-lg">
+        <h4 class="pb-2 border-bottom mx-4 my-3">Các nhóm thuốc</h4>
+        <div class="container">
+        <ul style="list-style-type:none;">
+        <li><a href="#">Xem tất cả</a></li>
+        @foreach (Category cate in Model.Category)
+        {
+        <li><a href="#">@Html.DisplayFor(modelItem => cate.CategoryName)</a></li>
+        }
+        </ul>
+        </div>
+        </div>
+        </div>*@
+        <div class="col-12" id="storage-table" style="display:none">
+            <div class="card card-cover rounded-4 shadow-lg p-3">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <a class="text-decoration-none" asp-action="ViewStorage" asp-route-sortOrder="@ViewData["MedId"]" asp-route-searchString="@ViewData["currentFilter"]">
+                                    Mã thuốc
+                                </a>
+                            </th>
+                            <th>
+                                Tên thuốc
+                            </th>
+                            <th>
+                                Mã lô
+                            </th>
+                            <th>
+                                <a class="text-decoration-none" asp-action="ViewStorage" asp-route-sortOrder="@ViewData["ExpDate"]" asp-route-searchString="@ViewData["currentFilter"]">
+                                    Hạn sử dụng
+                                </a>
+                            </th>
+                            <th>
+                                Tồn kho
+                            </th>
+                            <th>
+                                Đơn vị tính
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (CustomViewStorageModel item in Model.Storage)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Medicine.MedicineId)
+                                </td>
+                                <td>
+                                    @*<a asp-action="Details" asp-controller="ConsignmentDetail"
+                                   asp-route-impId="@item.Storage.ImportId"
+                                   asp-route-med="@item.Medicine.MedicineId"
+                                   asp-route-consId="@item.Consignment.ConsignmentId">
+                                        @Html.DisplayFor(modelItem => item.Medicine.MedicineName)
+                                    </a>*@
+                                </td>
+                                <td>
+                                    @*<a asp-action="Details" asp-controller="ConsignmentDetail"
+                                   asp-route-impId="@item.Storage.ImportId"
+                                   asp-route-med="@item.Medicine.MedicineId"
+                                   asp-route-consId="@item.Consignment.ConsignmentId">
+                                        @Html.DisplayFor(modelItem => item.Consignment.ConsignmentNumber)
+                                    </a>*@
+                                </td>
+                                <td>
+                                    @*<a asp-action="Details" asp-controller="ConsignmentDetail"
+                                   asp-route-impId="@item.Storage.ImportId"
+                                   asp-route-med="@item.Medicine.MedicineId"
+                                   asp-route-consId="@item.Consignment.ConsignmentId">
+                                        @Html.DisplayFor(modelItem => item.Consignment.ExpiredDate)
+                                    </a>*@
+                                </td>
+                                <td>
+                                    @*<a asp-action="Details" asp-controller="ConsignmentDetail"
+                                   asp-route-impId="@item.Storage.ImportId"
+                                   asp-route-med="@item.Medicine.MedicineId"
+                                   asp-route-consId="@item.Consignment.ConsignmentId">
+                                        @Html.DisplayFor(modelItem => item.Storage.Quantity)
+                                    </a>*@
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Medicine.Unit.UnitName)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $("#view-storage").click(function () {
+                var tab = document.getElementById("storage-table");
+                tab.style.display = "block";
+                localStorage.setItem('storageTableDisplay', 'block');
+            });
+            var storageTableDisplay = localStorage.getItem('storageTableDisplay');
+            if (storageTableDisplay === 'block') {
+                $('#storage-table').show();
+            }
+
+        });
+    </script>
+}

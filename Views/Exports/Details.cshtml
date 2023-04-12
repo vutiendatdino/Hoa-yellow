@@ -1,0 +1,155 @@
+﻿@using SP23_G21_SHSMS.Models.Campuses;
+@using SP23_G21_SHSMS.Models.SHSMS;
+@model dynamic
+
+@{
+    ViewData["Title"] = "Chi tiết đơn thuốc";
+    Student student = Model.Student;
+    Export export = Model.Export;
+    MedicalRecord record = Model.MedicalRecord;
+    IEnumerable<ExportDetail> exportDetails = Model.ExportDetails;
+    IEnumerable<Medicine> medicines = Model.Medicines;
+    IEnumerable<User> users = Model.Users;
+}
+
+<div class="container px-4 py-5">
+    <div class="card card-cover rounded-4 shadow-lg">
+        <p class="pb-2 border-bottom mx-4 my-3 text-secondary text-center h3">Thông tin hồ sơ</p>
+        <div class="container">
+            <div class="table-responsive mx-3">
+                <table class="table table-bordered">
+                    <tr>
+                        <td style="width: 15%;" class="table-light">@Html.DisplayNameFor(modelItem => student.StudentName)</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @{
+                                if (!student.RollNumber.ToLower().Equals("Temp".ToLower()))
+                                {
+                                    @Html.DisplayFor(modelItem => student.StudentName)
+                                    @Html.Raw(" - ")
+                                    @Html.DisplayFor(model => student.RollNumber)
+                                }
+                                if (student.RollNumber.ToLower().Equals("Temp".ToLower()))
+                                {
+                                    <a asp-controller="MedicalRecords" asp-action="Edit" asp-route-id="@export.MedicalRecordsId" class="text-decoration-none text-danger">Cập nhật thông tin</a>
+                                }
+                            }
+                        </td>
+                        <td style="width: 15%;" class="table-light">Người khám</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            @foreach (var u in users)
+                            {
+                                if (u.UserId == record.UserId)
+                                {
+                                    @Html.DisplayFor(modelItem => u.UserName)
+                                    break;
+                                }
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">Ngày tạo đơn thuốc</td>
+                        <td style="width: 35%;" class="fw-bold">
+                            
+                            @{
+                                var time = export.ExportDate?.ToString("dd/MM/yyyy hh:mm:ss");
+                            }
+                            @time
+                        </td>
+                        <td style="width: 15%;" class="table-light">Tổng tiền</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(modelItem => export.Amount)</td>
+                    </tr>
+                    <tr>
+                        <td style="width: 15%;" class="table-light">Ghi chú</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(modelItem => export.Note)</td>
+                        <td style="width: 15%;" class="table-light">Loại đơn xuất</td>
+                        <td style="width: 35%;" class="fw-bold">@Html.DisplayFor(modelItem => export.ExportType.ExportTypeName)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        @*Start*@
+        <p class="pb-2 border-bottom mx-4 my-3 text-secondary text-center h3">
+            Chi tiết đơn thuốc
+        </p>
+        <div class="container">
+            <div class="table-responsive mx-3">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="text-center">
+                                #
+                            </th>
+                            <th>
+                                Lô thuốc
+                            </th>
+                            <th>
+                                Tên thuốc
+                            </th>
+                            <th>
+                                Số lượng
+                            </th>
+                            <th>
+                                Giá tiền
+                            </th>
+                            <th>
+                                Tổng tiền
+                            </th>
+                            <th>
+                                HDSD
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int count2 = 0;
+                        }
+                        @foreach (var exportDetail in exportDetails)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    @(++count2)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => exportDetail.StorageId)
+                                </td>
+                                <td>
+                                    @foreach (var medicine in medicines)
+                                    {
+                                        if (medicine.MedicineId.ToLower().Equals(exportDetail.Storage.MedicineId.ToLower()))
+                                        {
+                                            @Html.DisplayFor(modelItem => medicine.MedicineName)
+                                            break;
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => exportDetail.Quantity)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => exportDetail.Price)
+                                </td>
+                                <td>
+                                    @(exportDetail.Price * exportDetail.Quantity)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => exportDetail.Direction)
+                                </td>
+                                @*<td>
+                            <a asp-action="Edit" asp-route-id="@item.ExportId">Edit</a> |
+                            <a asp-controller="Exports" asp-action="Details" asp-route-id="@item.ExportId">Details</a>
+                            | <a asp-action="Delete" asp-route-id="@item.ExportId">Delete</a>
+                            </td>*@
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        @*End*@
+    </div>
+</div>
+
+<div class="container">
+    @*<a asp-action="Edit" asp-route-id="">Sửa</a> |*@
+    <a asp-controller="MedicalRecords" asp-action="Details" asp-route-id="@record.MedicalRecordsId" class="btn btn-secondary  float-end">Quay lại</a>
+</div>

@@ -1,0 +1,163 @@
+﻿@using SP23_G21_SHSMS.Models.Campuses;
+@using SP23_G21_SHSMS.Models.SHSMS;
+@*@model IEnumerable<SP23_G21_SHSMS.Models.Campuses.MedicalRecord>*@
+@model dynamic
+
+@{
+    ViewData["Title"] = "Danh sách hồ sơ khám chữa bệnh";
+    IEnumerable<Student> students = Model.Students;
+    IEnumerable<Symptom> symptoms = Model.Symptoms;
+    IEnumerable<MedicalRecord> records = Model.MedicalRecords;
+    IEnumerable<Disease> diseases = Model.Diseases;
+    IEnumerable<Treatment> treatments = Model.Treatments;
+    IEnumerable<User> users = Model.Users;
+    User user = null;
+    Treatment treatment = null;
+    if (users.Any())
+    {
+        user = users.First();
+    }
+    if (treatments.Any())
+    {
+        treatment = treatments.First();
+    }
+}
+
+<h4 class="text-center mt-5">Danh sách hồ sơ khám chữa bệnh</h4>
+
+<div class="container">
+    @if (records is not null && records.Any())
+    {
+        var record = records.First();
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        STT
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => user.UserName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => @record.ExaminationTime)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => @record.DiseaseId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => @record.RollNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => treatment.TreatmentName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => @record.Note)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => @record.Sys)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => @record.Dia)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => @record.BodyTemperature)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var count = 0;
+                }
+                @foreach (var item in records)
+                {
+                    <tr>
+                        <td>
+                            @(++count)
+                        </td>
+                        <td>
+                            @foreach (var u in users)
+                            {
+                                if (u.UserId == item.UserId)
+                                {
+                                    @Html.DisplayFor(modelItem => u.UserName)
+                                    break;
+                                }
+                            }
+                        </td>
+                        <td>
+                            @{
+                                var time = item.ExaminationTime?.ToString("dd/MM/yyyy hh:mm:ss");
+                            }
+                            @time
+                        </td>
+                        <td>
+                            @foreach (var disease in diseases)
+                            {
+                                if (disease.DiseasesId == item.DiseaseId)
+                                {
+                                    @Html.DisplayFor(modelItem => disease.DiseasesName)
+                                    break;
+                                }
+                            }
+                        </td>
+                        <td>
+                            @foreach (var student in students)
+                            {
+                                if (student.RollNumber.ToLower().Equals(item.RollNumber.ToLower()))
+                                {
+                                    @Html.DisplayFor(modelItem => student.StudentName)
+                                    @Html.Raw(" - ")
+                                    @Html.DisplayFor(modelItem => student.RollNumber)
+                                    break;
+                                }
+                            }
+                        </td>
+                        <td>
+                            @foreach (var trm in treatments)
+                            {
+                                if (trm.TreatmentId == item.TreatmentId)
+                                {
+                                    @Html.DisplayFor(modelItem => trm.TreatmentName)
+                                    break;
+                                }
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Note)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Sys)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Dia)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BodyTemperature)
+                        </td>
+                        @*<td>
+                    @{
+                    string s = item.Status == true ? "Active" : "Deactive";
+                    }
+                    @s
+                    </td>*@
+                        <td>
+                            @*<a asp-action="Edit" asp-route-id="@item.MedicalRecordsId">Edit</a> |*@
+                            <a asp-action="Details" asp-route-id="@item.MedicalRecordsId">Details</a>
+                            @*| <a asp-action="Delete" asp-route-id="@item.MedicalRecordsId">Delete</a>*@
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+    else
+    {
+        <p class="pb-2 mx-4 my-3 text-secondary text-center h3">Hiện chưa có hồ sơ nào</p>
+    }
+</div>
+<script>
+
+</script>
